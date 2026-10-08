@@ -1,0 +1,73 @@
+USE CampusRide;
+
+CREATE TABLE Student (
+ StudentID INT PRIMARY KEY AUTO_INCREMENT,
+ StudentName VARCHAR(100) NOT NULL,
+ Email VARCHAR(120) NOT NULL UNIQUE,
+ Phone VARCHAR(15),
+ Gender ENUM('Male','Female','Other','Prefer not to say') NOT NULL,
+ CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE Location (
+ LocationID INT PRIMARY KEY AUTO_INCREMENT,
+ LocationName VARCHAR(100) NOT NULL UNIQUE,
+ Address VARCHAR(255)
+);
+
+CREATE TABLE Cab_Details (
+ CabID INT PRIMARY KEY AUTO_INCREMENT,
+ CabApp ENUM('Uber','Ola','Rapido','Other') NOT NULL,
+ VehicleType VARCHAR(30),
+ VehicleNumber VARCHAR(20),
+ DriverName VARCHAR(100),
+ DriverPhone VARCHAR(15)
+);
+
+CREATE TABLE Ride (
+ RideID INT PRIMARY KEY AUTO_INCREMENT,
+ CreatorID INT NOT NULL,
+ PickupLocationID INT NOT NULL,
+ DropLocationID INT NOT NULL,
+ CabID INT,
+ RideDate DATE NOT NULL,
+ RideTime TIME NOT NULL,
+ TotalFare DECIMAL(10,2) NOT NULL,
+ TotalSeats INT NOT NULL,
+ AvailableSeats INT NOT NULL,
+ GenderPreference ENUM('Any','Male','Female') DEFAULT 'Any',
+ AdditionalDetails VARCHAR(500),
+ RideStatus ENUM('OPEN','FULL','COMPLETED','CANCELLED') DEFAULT 'OPEN',
+ CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+ FOREIGN KEY (CreatorID) REFERENCES Student(StudentID),
+ FOREIGN KEY (PickupLocationID) REFERENCES Location(LocationID),
+ FOREIGN KEY (DropLocationID) REFERENCES Location(LocationID),
+ FOREIGN KEY (CabID) REFERENCES Cab_Details(CabID),
+ CHECK (TotalFare >= 0),
+ CHECK (TotalSeats > 0),
+ CHECK (AvailableSeats BETWEEN 0 AND TotalSeats),
+ CHECK (PickupLocationID <> DropLocationID)
+);
+
+CREATE TABLE Booking (
+ BookingID INT PRIMARY KEY AUTO_INCREMENT,
+ RideID INT NOT NULL,
+ StudentID INT NOT NULL,
+ BookingStatus ENUM('PENDING','ACCEPTED','REJECTED','CANCELLED','COMPLETED') DEFAULT 'PENDING',
+ IndividualFare DECIMAL(10,2) NOT NULL,
+ BookingDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+ FOREIGN KEY (RideID) REFERENCES Ride(RideID),
+ FOREIGN KEY (StudentID) REFERENCES Student(StudentID),
+ UNIQUE (RideID, StudentID),
+ CHECK (IndividualFare >= 0)
+);
+
+CREATE TABLE Rating (
+ RatingID INT PRIMARY KEY AUTO_INCREMENT,
+ BookingID INT NOT NULL UNIQUE,
+ RatingValue INT NOT NULL,
+ Comment VARCHAR(500),
+ RatingDate DATE DEFAULT (CURRENT_DATE),
+ FOREIGN KEY (BookingID) REFERENCES Booking(BookingID),
+ CHECK (RatingValue BETWEEN 1 AND 5)
+);
