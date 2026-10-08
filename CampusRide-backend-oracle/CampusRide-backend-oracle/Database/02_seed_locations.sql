@@ -1,0 +1,13 @@
+INSERT INTO Locations (LocationName, Address) VALUES ('VIT Chennai','Vandalur-Kelambakkam Road, Chennai');
+INSERT INTO Locations (LocationName, Address) VALUES ('Chennai Airport','Meenambakkam, Chennai');
+INSERT INTO Locations (LocationName, Address) VALUES ('Chennai Central','Park Town, Chennai');
+INSERT INTO Locations (LocationName, Address) VALUES ('Tambaram Station','Tambaram, Chennai');
+INSERT INTO Locations (LocationName, Address) VALUES ('Guindy','Guindy, Chennai');
+INSERT INTO Locations (LocationName, Address) VALUES ('T. Nagar','T. Nagar, Chennai');
+INSERT INTO Locations (LocationName, Address) VALUES ('Velachery','Velachery, Chennai');
+INSERT INTO Locations (LocationName, Address) VALUES ('Chromepet','Chromepet, Chennai');
+INSERT INTO Locations (LocationName, Address) VALUES ('Mahabalipuram','Mahabalipuram, Tamil Nadu');
+INSERT INTO Locations (LocationName, Address) VALUES ('Sholinganallur','Sholinganallur, Chennai');
+INSERT INTO Locations (LocationName, Address) VALUES ('OMR (IT Corridor)','Old Mahabalipuram Road, Chennai');
+INSERT INTO Locations (LocationName, Address) VALUES ('Egmore','Egmore, Chennai');
+COMMIT;

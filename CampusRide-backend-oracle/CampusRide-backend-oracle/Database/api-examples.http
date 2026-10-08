@@ -1,0 +1,47 @@
+### 1. Health check
+GET http://localhost:8080/api/health
+
+### 2. Locations
+GET http://localhost:8080/api/locations
+
+### 3. Register first student (ride creator)
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+{"name":"Demo Creator","studentId":"25BCE5001","email":"creator@vitstudent.ac.in","phone":"9876543210","gender":"Male","password":"demo123"}
+
+### 4. Register second student (passenger)
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+{"name":"Demo Passenger","studentId":"25BCE5002","email":"passenger@vitstudent.ac.in","phone":"9876543211","gender":"Female","password":"demo123"}
+
+### 5. Login
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{"identifier":"creator@vitstudent.ac.in","password":"demo123"}
+
+### 6. Create a ride: VIT Chennai (1) -> Chennai Airport (2)
+POST http://localhost:8080/api/rides
+Content-Type: application/json
+
+{"creatorId":1,"pickupLocationId":1,"dropLocationId":2,"startDateTime":"2026-10-15T18:00:00","estimatedEndDateTime":"2026-10-15T19:00:00","cabType":"Sedan","cabProvider":"Uber","totalSeats":4,"genderPreference":"Any","estimatedFare":800,"notes":"Airport trip after classes"}
+
+### 7. Search rides
+GET http://localhost:8080/api/rides/search?pickup=VIT%20Chennai&drop=Chennai%20Airport
+
+### 8. Passenger requests to join Ride 1
+POST http://localhost:8080/api/rides/1/join
+Content-Type: application/json
+
+{"userId":2}
+
+### 9. Creator accepts Booking 1
+PUT http://localhost:8080/api/bookings/1/accept
+Content-Type: application/json
+
+{"creatorId":1}
+
+### 10. Check Ride 1 members
+GET http://localhost:8080/api/rides/1/members

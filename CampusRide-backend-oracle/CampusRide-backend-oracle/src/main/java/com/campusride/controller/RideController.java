@@ -1,0 +1,11 @@
+package com.campusride.controller;
+import com.campusride.dto.*;import com.campusride.entity.*;import com.campusride.service.*;import jakarta.validation.Valid;import org.springframework.http.*;import org.springframework.web.bind.annotation.*;import java.time.LocalDateTime;import java.util.*;
+@RestController @RequestMapping("/api/rides") public class RideController {private final RideService rides;private final BookingService bookings;private final RatingService ratings;public RideController(RideService rides,BookingService bookings,RatingService ratings){this.rides=rides;this.bookings=bookings;this.ratings=ratings;}
+ @PostMapping public ResponseEntity<RideResponse> create(@Valid @RequestBody CreateRideRequest r){return ResponseEntity.status(HttpStatus.CREATED).body(rides.create(r));}
+ @GetMapping("/search") public List<RideResponse> search(@RequestParam(required=false) String pickup,@RequestParam(required=false) String drop,@RequestParam(required=false) String from,@RequestParam(required=false) String to){LocalDateTime f=from==null||from.isBlank()?null:LocalDateTime.parse(from);LocalDateTime t=to==null||to.isBlank()?null:LocalDateTime.parse(to);return rides.search(pickup,drop,f,t);}
+ @GetMapping("/{id}") public Object get(@PathVariable Integer id){return rides.getResponse(id);}
+ @PutMapping("/{id}/cancel") public RideResponse cancel(@PathVariable Integer id,@RequestBody(required=false) Map<String,Integer> body){Integer creatorId=body!=null?body.get("creatorId"):null;return rides.cancel(id,creatorId);}
+ @PostMapping("/{id}/join") public ResponseEntity<?> join(@PathVariable Integer id,@Valid @RequestBody JoinRideRequest r){Booking b=bookings.request(id,r);return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("bookingId",b.getBookingId(),"status",b.getStatus(),"rideId",id,"userId",r.userId()));}
+ @GetMapping("/{id}/members") public Object members(@PathVariable Integer id){return rides.members(id);}
+ @GetMapping("/{id}/bookings") public Object rideBookings(@PathVariable Integer id){return bookings.byRide(id);}
+ @PostMapping("/{id}/rating") public ResponseEntity<?> rate(@PathVariable Integer id,@Valid @RequestBody RatingRequest r){return ResponseEntity.status(HttpStatus.CREATED).body(ratings.add(id,r));}}
